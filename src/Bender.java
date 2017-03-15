@@ -66,9 +66,25 @@ class Bender {
                 if (invers == false) {
                     invers = true;
                     }else invers = false;
-                }
+            }
+            if (map[posicio[0]][posicio[1]] == 'T'){
+                posicio = tele(posicio);
+            }
             }
         return ruta;
+    }
+
+    private int[] tele(int[] posicio) {
+        int[] pos = new int[2];
+        for (int i = 0; i < tamanyY; i++) {
+            for (int j = 0; j < tamanyX; j++) {
+                if (map[i][j] == 'T' && (i != posicio[0] && j != posicio[1])) {
+                    pos[0] = i;
+                    pos[1] = j;
+                }
+            }
+        }
+        return pos;
     }
 
     private char camviDireccio(boolean i, int[] posicio) {
