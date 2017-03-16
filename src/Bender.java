@@ -98,6 +98,7 @@ class Bender {
                 posicio = tele(posicio);
                 empleat = true;
             }
+            if (ruta.length() >= tamanyMaxX*tamanyMaxY) return null;
         }
         return ruta;
     }
