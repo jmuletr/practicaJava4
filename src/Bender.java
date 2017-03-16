@@ -9,17 +9,21 @@ import java.util.Queue;
 class Bender {
     char[][] map;
     int[] posicioX = new int[2];
-    int tamanyX = 0;
-    int tamanyY = 0;
+    int tamanyMaxX = 0;
+    int tamanyMaxY = 0;
 
     // Constructor: ens passen el mapa en forma d'String
     public Bender(String mapa) {
         String[] temp = mapa.split("\\n");
-        tamanyY = temp.length;
-        tamanyX = temp[0].length();
-        map = new char[tamanyY][tamanyX];
-        for (int i = 0; i < tamanyY; i++) {
-            for (int j = 0; j < tamanyX; j++) {
+        tamanyMaxY = temp.length;
+        for (int i = 0; i < tamanyMaxY; i++) {
+            if (temp[i].length() > tamanyMaxX){
+                tamanyMaxX = temp[i].length();
+            }
+        }
+        map = new char[tamanyMaxY][tamanyMaxX];
+        for (int i = 0; i < tamanyMaxY; i++) {
+            for (int j = 0; j < tamanyMaxX; j++) {
                 map[i][j] = temp[i].charAt(j);
                 if (temp[i].charAt(j) == 'X') {
                     posicioX[0] = i;
@@ -50,25 +54,37 @@ class Bender {
                     ruta += "S";
                     posicio[0]++;
                     empleat = false;
-                } else direccio = dir.poll();
+                } else{
+                    dir = novaQeue(invers);
+                    direccio = camviDireccio(dir, posicio);
+                }
             } else if (direccio == 'N') {
                 if (map[posicio[0] - 1][posicio[1]] != '#') {
                     ruta += "N";
                     posicio[0]--;
                     empleat = false;
-                } else direccio = dir.poll();
+                } else{
+                    dir = novaQeue(invers);
+                    direccio = camviDireccio(dir, posicio);
+                }
             } else if (direccio == 'E') {
                 if (map[posicio[0]][posicio[1] + 1] != '#') {
                     ruta += "E";
                     posicio[1]++;
                     empleat = false;
-                } else direccio = dir.poll();
+                } else{
+                    dir = novaQeue(invers);
+                    direccio = camviDireccio(dir, posicio);
+                }
             } else if (direccio == 'W') {
                 if (map[posicio[0]][posicio[1] - 1] != '#') {
                     ruta += "W";
                     posicio[1]--;
                     empleat = false;
-                } else direccio = dir.poll();
+                } else{
+                    dir = novaQeue(invers);
+                    direccio = camviDireccio(dir, posicio);
+                }
             }
             if (map[posicio[0]][posicio[1]] == 'I' && empleat == false) {
                 if (invers == false) {
@@ -95,8 +111,8 @@ class Bender {
 
     private int[] tele(int[] posicio) {
         int[] pos = new int[2];
-        for (int i = 0; i < tamanyY; i++) {
-            for (int j = 0; j < tamanyX; j++) {
+        for (int i = 0; i < tamanyMaxY; i++) {
+            for (int j = 0; j < tamanyMaxX; j++) {
                 if (map[i][j] == 'T' && (i != posicio[0] && j != posicio[1])) {
                     pos[0] = i;
                     pos[1] = j;
@@ -106,27 +122,29 @@ class Bender {
         return pos;
     }
 
-//    private char camviDireccio(Queue<Character> dir, int[] posicio) {
-//
-//
-//        if (dir.element() == 'S') {
-//            if (map[posicio[0] + 1][posicio[1]] != '#') {
-//                return dir.poll();
-//            }
-//        } else if (dir.element() == 'N') {
-//            if (map[posicio[0] - 1][posicio[1]] != '#') {
-//                return dir.poll();
-//            }
-//        } else if (dir.element() == 'E') {
-//            if (map[posicio[0]][posicio[1] + 1] != '#') {
-//                return dir.poll();
-//            }
-//        } else if (dir.element() == 'W') {
-//            if (map[posicio[0]][posicio[1] - 1] != '#') {
-//                return dir.poll();
-//            }
-//        }
-//
-//        return 'S';
-//    }
+    private char camviDireccio(Queue<Character> dir, int[] posicio) {
+
+
+        for (int i = 0; i < 4; i++) {
+            if (dir.element() == 'S') {
+                if (map[posicio[0] + 1][posicio[1]] != '#') {
+                    return dir.poll();
+                }else dir.remove();
+            } else if (dir.element() == 'N') {
+                if (map[posicio[0] - 1][posicio[1]] != '#') {
+                    return dir.poll();
+                }else dir.remove();
+            } else if (dir.element() == 'E') {
+                if (map[posicio[0]][posicio[1] + 1] != '#') {
+                    return dir.poll();
+                }else dir.remove();
+            } else if (dir.element() == 'W') {
+                if (map[posicio[0]][posicio[1] - 1] != '#') {
+                    return dir.poll();
+                }else dir.remove();
+            }
+        }
+
+        return 'S';
+    }
 }
