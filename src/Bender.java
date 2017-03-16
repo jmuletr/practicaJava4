@@ -6,6 +6,8 @@ import java.util.Queue;
  * Created by jmuletr on 15/03/2017.
  */
 class Bender {
+    //posar dibuixar a true per imprimir per pantalla el robot bender en arrivar al signe $
+    boolean dibuixar = false;
     char[][] map;
     int[] posicioX = new int[2];
     int tamanyMaxX = 0;
@@ -100,6 +102,7 @@ class Bender {
             }
             if (ruta.length() >= tamanyMaxX*tamanyMaxY) return null;
         }
+        if (dibuixar) benderArt();
         return ruta;
     }
 
@@ -145,5 +148,13 @@ class Bender {
             }
         }
         return 'S';
+    }
+
+    private void benderArt(){
+        System.out.println("      _\n" + "     ( )\n" + "      H\n" + "      H\n" + "     _H_ \n" +
+                "  .-'-.-'-.\n" + " /         \\\n" + "|           |\n" + "|   .-------'._\n" +
+                "|  / /  '.' '. \\\n" + "|  \\ \\ @   @ / / \n" + "|   '---------'        \n" +
+                "|    _______|  \n" + "|  .'-+-+-+|  \n" + "|  '.-+-+-+|         \n" +
+                "|    \"\"\"\"\"\" |\n" + "'-.__   __.-'\n" + "     \"\"\"  \n");
     }
 }
