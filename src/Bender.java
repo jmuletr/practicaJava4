@@ -86,7 +86,7 @@ class Bender {
                     direccio = camviDireccio(dir, posicio);
                 }
             }
-            if (map[posicio[0]][posicio[1]] == 'I' && empleat == false) {
+            if (map[posicio[0]][posicio[1]] == 'I' && !empleat) {
                 if (invers == false) {
                     invers = true;
                 } else invers = false;
@@ -94,8 +94,9 @@ class Bender {
                 direccio = dir.poll();
                 empleat = true;
             }
-            if (map[posicio[0]][posicio[1]] == 'T') {
+            if (map[posicio[0]][posicio[1]] == 'T' && !empleat) {
                 posicio = tele(posicio);
+                empleat = true;
             }
         }
         return ruta;
