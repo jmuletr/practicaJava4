@@ -23,7 +23,7 @@ class Bender {
         map = new char[tamanyMaxY][tamanyMaxX];
         for (int i = 0; i < tamanyMaxY; i++) {
             for (int j = 0; j < tamanyMaxX; j++) {
-                if (temp[i].charAt(j) == 0) break;
+                if (j >= temp[i].length()) break;
                 map[i][j] = temp[i].charAt(j);
                 if (temp[i].charAt(j) == 'X') {
                     posicioX[0] = i;
