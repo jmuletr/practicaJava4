@@ -8,31 +8,11 @@ import java.util.Queue;
 class Bender {
     //posar dibuixar a true per imprimir per pantalla el robot bender en arrivar al signe $
     boolean dibuixar = false;
-    char[][] map;
-    int[] posicioX = new int[2];
-    int tamanyMaxX = 0;
-    int tamanyMaxY = 0;
+    Mapa map;
 
     // Constructor: ens passen el mapa en forma d'String
     public Bender(String mapa) {
-        String[] temp = mapa.split("\\n");
-        tamanyMaxY = temp.length;
-        for (int i = 0; i < tamanyMaxY; i++) {
-            if (temp[i].length() > tamanyMaxX) {
-                tamanyMaxX = temp[i].length();
-            }
-        }
-        map = new char[tamanyMaxY][tamanyMaxX];
-        for (int i = 0; i < tamanyMaxY; i++) {
-            for (int j = 0; j < tamanyMaxX; j++) {
-                if (j >= temp[i].length()) break;
-                map[i][j] = temp[i].charAt(j);
-                if (temp[i].charAt(j) == 'X') {
-                    posicioX[0] = i;
-                    posicioX[1] = j;
-                }
-            }
-        }
+        map = new Mapa(mapa);
     }
 
 
@@ -48,11 +28,11 @@ class Bender {
         boolean empleat = false;
         Queue<Character> dir = novaQeue(invers);
         char direccio = dir.poll();
-        int[] posicio = posicioX;
-        while (map[posicio[0]][posicio[1]] != '$') {
+        int[] posicio = map.posicioX;
+        while (map.m[posicio[0]][posicio[1]] != '$') {
             if (dir.isEmpty()) dir = novaQeue(invers);
             if (direccio == 'S') {
-                if (map[posicio[0] + 1][posicio[1]] != '#') {
+                if (map.m[posicio[0] + 1][posicio[1]] != '#') {
                     ruta += "S";
                     posicio[0]++;
                     empleat = false;
@@ -61,7 +41,7 @@ class Bender {
                     direccio = camviDireccio(dir, posicio);
                 }
             } else if (direccio == 'N') {
-                if (map[posicio[0] - 1][posicio[1]] != '#') {
+                if (map.m[posicio[0] - 1][posicio[1]] != '#') {
                     ruta += "N";
                     posicio[0]--;
                     empleat = false;
@@ -70,7 +50,7 @@ class Bender {
                     direccio = camviDireccio(dir, posicio);
                 }
             } else if (direccio == 'E') {
-                if (map[posicio[0]][posicio[1] + 1] != '#') {
+                if (map.m[posicio[0]][posicio[1] + 1] != '#') {
                     ruta += "E";
                     posicio[1]++;
                     empleat = false;
@@ -79,7 +59,7 @@ class Bender {
                     direccio = camviDireccio(dir, posicio);
                 }
             } else if (direccio == 'W') {
-                if (map[posicio[0]][posicio[1] - 1] != '#') {
+                if (map.m[posicio[0]][posicio[1] - 1] != '#') {
                     ruta += "W";
                     posicio[1]--;
                     empleat = false;
@@ -88,7 +68,7 @@ class Bender {
                     direccio = camviDireccio(dir, posicio);
                 }
             }
-            if (map[posicio[0]][posicio[1]] == 'I' && !empleat) {
+            if (map.m[posicio[0]][posicio[1]] == 'I' && !empleat) {
                 if (invers == false) {
                     invers = true;
                 } else invers = false;
@@ -96,11 +76,11 @@ class Bender {
                 direccio = dir.poll();
                 empleat = true;
             }
-            if (map[posicio[0]][posicio[1]] == 'T' && !empleat) {
+            if (map.m[posicio[0]][posicio[1]] == 'T' && !empleat) {
                 posicio = tele(posicio);
                 empleat = true;
             }
-            if (ruta.length() >= tamanyMaxX*tamanyMaxY) return null;
+            if (ruta.length() >= map.tamanyMaxX*map.tamanyMaxY) return null;
         }
         if (dibuixar) benderArt();
         return ruta;
@@ -116,9 +96,9 @@ class Bender {
 
     private int[] tele(int[] posicio) {
         int[] pos = new int[2];
-        for (int i = 0; i < tamanyMaxY; i++) {
-            for (int j = 0; j < tamanyMaxX; j++) {
-                if (map[i][j] == 'T' && (i != posicio[0] && j != posicio[1])) {
+        for (int i = 0; i < map.tamanyMaxY; i++) {
+            for (int j = 0; j < map.tamanyMaxX; j++) {
+                if (map.m[i][j] == 'T' && (i != posicio[0] && j != posicio[1])) {
                     pos[0] = i;
                     pos[1] = j;
                 }
@@ -130,19 +110,19 @@ class Bender {
     private char camviDireccio(Queue<Character> dir, int[] posicio) {
         for (int i = 0; i < 4; i++) {
             if (dir.element() == 'S') {
-                if (map[posicio[0] + 1][posicio[1]] != '#') {
+                if (map.m[posicio[0] + 1][posicio[1]] != '#') {
                     return dir.poll();
                 } else dir.remove();
             } else if (dir.element() == 'N') {
-                if (map[posicio[0] - 1][posicio[1]] != '#') {
+                if (map.m[posicio[0] - 1][posicio[1]] != '#') {
                     return dir.poll();
                 } else dir.remove();
             } else if (dir.element() == 'E') {
-                if (map[posicio[0]][posicio[1] + 1] != '#') {
+                if (map.m[posicio[0]][posicio[1] + 1] != '#') {
                     return dir.poll();
                 } else dir.remove();
             } else if (dir.element() == 'W') {
-                if (map[posicio[0]][posicio[1] - 1] != '#') {
+                if (map.m[posicio[0]][posicio[1] - 1] != '#') {
                     return dir.poll();
                 } else dir.remove();
             }
