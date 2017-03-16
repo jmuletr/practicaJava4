@@ -1,6 +1,5 @@
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 /**
@@ -17,7 +16,7 @@ class Bender {
         String[] temp = mapa.split("\\n");
         tamanyMaxY = temp.length;
         for (int i = 0; i < tamanyMaxY; i++) {
-            if (temp[i].length() > tamanyMaxX){
+            if (temp[i].length() > tamanyMaxX) {
                 tamanyMaxX = temp[i].length();
             }
         }
@@ -54,7 +53,7 @@ class Bender {
                     ruta += "S";
                     posicio[0]++;
                     empleat = false;
-                } else{
+                } else {
                     dir = novaQeue(invers);
                     direccio = camviDireccio(dir, posicio);
                 }
@@ -63,7 +62,7 @@ class Bender {
                     ruta += "N";
                     posicio[0]--;
                     empleat = false;
-                } else{
+                } else {
                     dir = novaQeue(invers);
                     direccio = camviDireccio(dir, posicio);
                 }
@@ -72,7 +71,7 @@ class Bender {
                     ruta += "E";
                     posicio[1]++;
                     empleat = false;
-                } else{
+                } else {
                     dir = novaQeue(invers);
                     direccio = camviDireccio(dir, posicio);
                 }
@@ -81,7 +80,7 @@ class Bender {
                     ruta += "W";
                     posicio[1]--;
                     empleat = false;
-                } else{
+                } else {
                     dir = novaQeue(invers);
                     direccio = camviDireccio(dir, posicio);
                 }
@@ -123,28 +122,25 @@ class Bender {
     }
 
     private char camviDireccio(Queue<Character> dir, int[] posicio) {
-
-
         for (int i = 0; i < 4; i++) {
             if (dir.element() == 'S') {
                 if (map[posicio[0] + 1][posicio[1]] != '#') {
                     return dir.poll();
-                }else dir.remove();
+                } else dir.remove();
             } else if (dir.element() == 'N') {
                 if (map[posicio[0] - 1][posicio[1]] != '#') {
                     return dir.poll();
-                }else dir.remove();
+                } else dir.remove();
             } else if (dir.element() == 'E') {
                 if (map[posicio[0]][posicio[1] + 1] != '#') {
                     return dir.poll();
-                }else dir.remove();
+                } else dir.remove();
             } else if (dir.element() == 'W') {
                 if (map[posicio[0]][posicio[1] - 1] != '#') {
                     return dir.poll();
-                }else dir.remove();
+                } else dir.remove();
             }
         }
-
         return 'S';
     }
 }
