@@ -2,10 +2,12 @@
  * Created by jmuletr on 16/03/2017.
  */
 public class Mapa {
+    //mapa construit en array de caracters
     char[][] m;
     int[] posicioX = new int[2];
     int tamanyMaxX = 0;
     int tamanyMaxY = 0;
+    int[] posicio$ = new int[2];
 
     Mapa(String mapa){
         String[] temp = mapa.split("\\n");
@@ -24,7 +26,15 @@ public class Mapa {
                     posicioX[0] = i;
                     posicioX[1] = j;
                 }
+                if (temp[i].charAt(j) == '$') {
+                    posicio$[0] = i;
+                    posicio$[1] = j;
+                }
             }
         }
+    }
+
+    void replace(int[] posicio) {
+        m[posicio[0]][posicio[1]] = '#';
     }
 }
