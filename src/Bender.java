@@ -16,12 +16,13 @@ class Bender {
 // El valor retornat pel mètode consisteix en una cadena de
 // caràcters on cada lletra pot tenir els valors «S», «N», «W» o «E»,
 // segons la posició del robot a cada moment.
-    /*S (South), E (East), N (North), W (West)
-    * inversa N (North), W (West), S (South), E (East)*/
     public String run() {
         Robot bender = new Robot(map, dibuixar);
         return bender.run();
     }
 
-
+    public int bestRun() {
+        Robot bender = new Robot(map, dibuixar);
+        return bender.bestRun();
+    }
 }
