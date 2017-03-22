@@ -12,14 +12,15 @@ public class Robot {
     boolean empleat = false;
     Queue<Character> dir = novaQeue(invers);
     char direccio = dir.poll();
-    int[] posicio;
+    int[] posicio = new int[2];
     int[] posicioX;
     int[] posicio$;
     int pasos = 0;
     int heuristica;
     boolean dibuixar;
         Robot(Mapa map, boolean dib){
-            posicio  = map.posicioX;
+            posicio[0]  = map.posicioX[0];
+            posicio[1]  = map.posicioX[1];
             posicioX = map.posicioX;
             posicio$ = map.posicio$;
             this.map = map;
@@ -131,49 +132,64 @@ public class Robot {
 
     int bestRun() {
         while (map.m[posicio[0]][posicio[1]] != '$') {
-            System.out.println(pasos);
+            //deb();
+            if (posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
+                pasos = 0;
+            }
             if (map.posicioX[0] == 0 && map.posicioX[1] == 0) return 0;
             if (dir.isEmpty()) dir = novaQeue(invers);
             direccio = calcDireccio(posicio, posicio$);
             if (direccio == 'S') {
-                if (map.m[posicio[0] + 1][posicio[1]] != '#') {
+                if (map.m[posicio[0] + 1][posicio[1]] != '#' && map.m[posicio[0] + 1][posicio[1]] != 'P') {
                     pasos++;
                     posicio[0]++;
                     empleat = false;
                 }else {
-                    map.replace(posicio);
-                    pasos = 0;
-                    posicio = posicioX;
+                    map.replace(posicio[0] + 1, posicio[1], '#');
+                    if(posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
+                        pasos = 0;
+                        posicio[0] = posicioX[0];
+                        posicio[1] = posicioX[1];
+                    }
                 }
             } else if (direccio == 'N') {
-                if (posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != '#') {
+                if (posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != '#' && posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != 'P') {
                     pasos++;
                     posicio[0]--;
                     empleat = false;
                 }else {
-                    map.replace(posicio);
-                    pasos = 0;
-                    posicio = posicioX;
+                    map.replace(posicio[0] - 1, posicio[1], '#');
+                    if(posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
+                        pasos = 0;
+                        posicio[0] = posicioX[0];
+                        posicio[1] = posicioX[1];
+                    }
                 }
             } else if (direccio == 'E') {
-                if (map.m[posicio[0]][posicio[1] + 1] != '#') {
+                if (map.m[posicio[0]][posicio[1] + 1] != '#' && map.m[posicio[0]][posicio[1] + 1] != 'P') {
                     pasos++;
                     posicio[1]++;
                     empleat = false;
                 }else {
-                    map.replace(posicio);
-                    pasos = 0;
-                    posicio = posicioX;
+                    map.replace(posicio[0], posicio[1] + 1,'#');
+                    if(posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
+                        pasos = 0;
+                        posicio[0] = posicioX[0];
+                        posicio[1] = posicioX[1];
+                    }
                 }
             } else if (direccio == 'W') {
-                if (posicio[1] - 1 >=0 && map.m[posicio[0]][posicio[1] - 1] != '#') {
+                if (posicio[1] - 1 >=0 && map.m[posicio[0]][posicio[1] - 1] != '#' && map.m[posicio[0]][posicio[1] - 1] != 'P') {
                     pasos++;
                     posicio[1]--;
                     empleat = false;
                 }else {
-                    map.replace(posicio);
-                    pasos = 0;
-                    posicio = posicioX;
+                    map.replace(posicio[0],posicio[1] - 1, '#');
+                    if(posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
+                        pasos = 0;
+                        posicio[0] = posicioX[0];
+                        posicio[1] = posicioX[1];
+                    }
                 }
             }
             if (map.m[posicio[0]][posicio[1]] == 'T' && !empleat) {
@@ -181,16 +197,29 @@ public class Robot {
                 empleat = true;
             }
             if (pasos >= map.tamanyMaxX*map.tamanyMaxY) return 0;
+            map.replace(posicio[0], posicio[1],'P');
         }
         if (dibuixar) benderArt();
         return pasos;
+    }
+
+    private void deb() {
+        for (int i = 0; i < map.m.length; i++) {
+            for (int j = 0; j < map.m[i].length; j++) {
+                if (i == posicio[0] && j == posicio[1]){
+                    System.out.print('B');
+                }else System.out.print(map.m[i][j]);
+            }
+            System.out.println("");
+        }
+        System.out.println(pasos);
     }
 
     private char calcDireccio(int[] posicio, int[] posicio$) {
         heuristica = 0;
         int p[] = new int[2];
         char dir = 'S';
-            if (map.m[posicio[0] + 1][posicio[1]] != '#') {
+            if (map.m[posicio[0] + 1][posicio[1]] != '#' && map.m[posicio[0] + 1][posicio[1]] != 'P') {
                 p[0] = posicio[0] + 1;
                 p[1] = posicio[1];
                 if (heuristica > calcHeuristica(posicio$,p) || heuristica == 0) {
@@ -199,7 +228,7 @@ public class Robot {
                 }
             }
 
-            if (posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != '#') {
+            if (posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != '#'&& posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != 'P') {
                 p[0] = posicio[0] - 1;
                 p[1] = posicio[1];
                 if (heuristica > calcHeuristica(posicio$,p) || heuristica == 0){
@@ -208,7 +237,7 @@ public class Robot {
                 }
             }
 
-            if (map.m[posicio[0]][posicio[1] + 1] != '#') {
+            if (map.m[posicio[0]][posicio[1] + 1] != '#' && map.m[posicio[0]][posicio[1] + 1] != 'P') {
                 p[0] = posicio[0];
                 p[1] = posicio[1] + 1;
                 if (heuristica > calcHeuristica(posicio$,p) || heuristica == 0){
@@ -217,7 +246,7 @@ public class Robot {
                 }
             }
 
-            if (posicio[1] - 1 >=0 && map.m[posicio[0]][posicio[1] - 1] != '#') {
+            if (posicio[1] - 1 >=0 && map.m[posicio[0]][posicio[1] - 1] != '#' && map.m[posicio[0]][posicio[1] - 1] != 'P') {
                 p[0] = posicio[0];
                 p[1] = posicio[1] - 1;
                 if (heuristica > calcHeuristica(posicio$,p) || heuristica == 0){

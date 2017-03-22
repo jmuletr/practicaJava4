@@ -34,7 +34,13 @@ public class Mapa {
         }
     }
 
-    void replace(int[] posicio) {
-        m[posicio[0]][posicio[1]] = '#';
+    void replace(int pos1, int pos2, char c) {
+        if (m[pos1][pos2] != '$'){
+            if (m[pos1][pos2] != 'T') {
+                if (m[pos1][pos2] != 'I') {
+                    m[pos1][pos2] = c;
+                }
+            }
+        }
     }
 }
