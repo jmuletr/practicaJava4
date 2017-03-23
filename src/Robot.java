@@ -296,6 +296,7 @@ public class Robot {
         return pos0 + pos1;
     }
 
+    //funcio que dibuixa a bender en ascii art
     private void benderArt(){
         System.out.println("      _\n" + "     ( )\n" + "      H\n" + "      H\n" + "     _H_ \n" +
                 "  .-'-.-'-.\n" + " /         \\\n" + "|           |\n" + "|   .-------'._\n" +
