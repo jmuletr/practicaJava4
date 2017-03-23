@@ -6,17 +6,27 @@ import java.util.Queue;
  * Created by jmuletr on 16/03/2017.
  */
 public class Robot {
+    //objecte mapa per on es moura el robot
     Mapa map;
+    //cami que ha seguit
     String ruta = "";
+    //variables per coneixer si s'ha utilitzat un teleport o un inversor i per coneixer si l'inversor esta actiu
     boolean invers = false;
     boolean empleat = false;
+    //cua de direccions
     Queue<Character> dir = novaQeue(invers);
+    //direccio actual
     char direccio = dir.poll();
+    //posicio actual del robot
     int[] posicio = new int[2];
+    //posicio de x i $ (s'hutilitzen a bestRun)
     int[] posicioX;
     int[] posicio$;
+    //pasos donats fins al desti (s'hutilitza a bestRun)
     int pasos = 0;
+    //variable per calcular la direccio que prendra el robot (s'hutilitza a bestRun)
     int heuristica;
+    //variable per activar o desactivar la funcio benderArt que dibuixa al robot bender en ascii art
     boolean dibuixar;
         Robot(Mapa map, boolean dib){
             posicio[0]  = map.posicioX[0];
@@ -29,6 +39,7 @@ public class Robot {
 
         String run (){
             while (map.m[posicio[0]][posicio[1]] != '$') {
+                //deb();
                 if (map.posicioX[0] == 0 && map.posicioX[1] == 0) return null;
                 if (dir.isEmpty()) dir = novaQeue(invers);
                 if (direccio == 'S') {
@@ -130,6 +141,8 @@ public class Robot {
         return 'S';
     }
 
+
+    //A partir d'aquest punt es el codi per als segons test (no esta complet nomes pasa els dos primers mapes)
     int bestRun() {
         while (map.m[posicio[0]][posicio[1]] != '$') {
             //deb();

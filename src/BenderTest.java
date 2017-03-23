@@ -343,4 +343,19 @@ public class BenderTest {
         Bender bender = new Bender(mapa);
         assertEquals("SSNNN", bender.run());
     }
+
+    @Test
+    public void test23() {
+        String mapa = "" +
+                "     #####     \n" +
+                "     #I  #     \n" +
+                "######   ######\n" +
+                "#    #       I#\n" +
+                "# X           #\n" +
+                "######   ######\n" +
+                "     #  $#     \n" +
+                "     #####     \n";
+        Bender bender = new Bender(mapa);
+        assertEquals("EEEEEEEEEEENWWWWWWWNNSSSSSEE", bender.run());
+    }
 }

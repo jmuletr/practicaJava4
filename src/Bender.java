@@ -4,11 +4,15 @@
 class Bender {
     //posar dibuixar a true per imprimir per pantalla el robot bender en arrivar al signe $
     boolean dibuixar = false;
+    //variable on es guarda l'objecte mapa i l'objecte robot
     Mapa map;
+    Robot bender;
 
     // Constructor: ens passen el mapa en forma d'String
     public Bender(String mapa) {
+        //constructor de bender on es creen els objectes mapa i robot i s'asignen a les seves variables corresponents
         map = new Mapa(mapa);
+        bender = new Robot(map, dibuixar);
     }
 
 
@@ -17,12 +21,13 @@ class Bender {
 // caràcters on cada lletra pot tenir els valors «S», «N», «W» o «E»,
 // segons la posició del robot a cada moment.
     public String run() {
-        Robot bender = new Robot(map, dibuixar);
+        //retornam el cami recorregut per bender com a string generat cridant la funcio run del objecte robot
         return bender.run();
     }
 
     public int bestRun() {
-        Robot bender = new Robot(map, dibuixar);
+        //retornam les pases donades per arribar al seu desti en forma de int cridant la funcio bestRun
+        // del objecte robot
         return bender.bestRun();
     }
 }
