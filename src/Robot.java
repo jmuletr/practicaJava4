@@ -111,7 +111,7 @@ public class Robot {
             //si em arrivat al desti retornam la ruta
             return ruta;
         }
-
+    //funcio que genera una nova cua depenguent de si es la cua normal o la inversa
     private Queue<Character> novaQeue(boolean i) {
         Queue<Character> dir = new LinkedList<>();
         if (!i) {
@@ -119,7 +119,7 @@ public class Robot {
         } else Collections.addAll(dir, 'N', 'W', 'S', 'E');
         return dir;
     }
-
+    //funcio que mou la posicio de una T a l'altre
     private int[] tele(int[] posicio) {
         int[] pos = new int[2];
         for (int i = 0; i < map.tamanyMaxY; i++) {
@@ -132,7 +132,7 @@ public class Robot {
         }
         return pos;
     }
-
+    //funcio per a camviar de direccio seguint l'ordre que dona la cua de direccions
     private char camviDireccio(Queue<Character> dir, int[] posicio) {
         for (int i = 0; i < 4; i++) {
             if (dir.element() == 'S') {
