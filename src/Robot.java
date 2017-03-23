@@ -39,12 +39,19 @@ public class Robot {
             dibuixar = dib;
             debugger = debug;
         }
-
+        //funcio on es retorna el cami recorregut amb direccions predefinides
         String run (){
+            //bucle que s'executa fins que s'arriva al desti
             while (map.m[posicio[0]][posicio[1]] != '$') {
-                deb(debugger);
+                //si debbugger es true es crida a la funcio deb
+                if (debugger)deb();
+                //si no hi ha X es retorna null
                 if (map.posicioX[0] == 0 && map.posicioX[1] == 0) return null;
+                //si la cua de direccions es vuida es genera una nova
                 if (dir.isEmpty()) dir = novaQeue(invers);
+                //es mira la direccio que es du i es comproba si es pot avançar en dita direccio, en cas afirmatiu es cambia la posicio i
+                //s'afegeix la direccio a la ruta.
+                //en cas contrari es genera una nova cua i es comprova a quina direccio es pot avançar.
                 if (direccio == 'S') {
                     if (map.m[posicio[0] + 1][posicio[1]] != '#') {
                         ruta += "S";
@@ -82,6 +89,7 @@ public class Robot {
                         direccio = camviDireccio(dir, posicio);
                     }
                 }
+                //si pasam per una I camviam l'ordre de direccions i generam la nova cua
                 if (map.m[posicio[0]][posicio[1]] == 'I' && !empleat) {
                     if (invers == false) {
                         invers = true;
@@ -90,13 +98,17 @@ public class Robot {
                     direccio = dir.poll();
                     empleat = true;
                 }
+                //si pasam per una T cridam la funcio tele per mourernos a l'altre T
                 if (map.m[posicio[0]][posicio[1]] == 'T' && !empleat) {
                     posicio = tele(this.posicio);
                     empleat = true;
                 }
+                //si no em arribat al desti una vegada fet tantes pases com posicions te el mapa retornam null
                 if (ruta.length() >= map.tamanyMaxX*map.tamanyMaxY) return null;
             }
+            //si dibuixar es true cridam la funcio benderArt
             if (dibuixar) benderArt();
+            //si em arrivat al desti retornam la ruta
             return ruta;
         }
 
@@ -148,7 +160,7 @@ public class Robot {
     //A partir d'aquest punt es el codi per als segons test (no esta complet nomes pasa els dos primers mapes)
     int bestRun() {
         while (map.m[posicio[0]][posicio[1]] != '$') {
-            deb(debugger);
+            if (debugger)deb();
             if (posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
                 pasos = 0;
             }
@@ -219,8 +231,7 @@ public class Robot {
         return pasos;
     }
 
-    private void deb(boolean d) {
-        if (d){
+    private void deb() {
             for (int i = 0; i < map.m.length; i++) {
                 for (int j = 0; j < map.m[i].length; j++) {
                     if (i == posicio[0] && j == posicio[1]){
@@ -230,7 +241,6 @@ public class Robot {
                 System.out.println("");
             }
             System.out.println(pasos);
-        }
     }
 
     private char calcDireccio(int[] posicio, int[] posicio$) {
