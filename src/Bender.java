@@ -4,6 +4,8 @@
 class Bender {
     //posar dibuixar a true per imprimir per pantalla el robot bender en arrivar al signe $
     boolean dibuixar = false;
+    //posar a true per activar el debugger on mostra graficament per terminal el mapa i la posicio de bender
+    boolean debug = false;
     //variable on es guarda l'objecte mapa i l'objecte robot
     Mapa map;
     Robot bender;
@@ -12,7 +14,7 @@ class Bender {
     public Bender(String mapa) {
         //constructor de bender on es creen els objectes mapa i robot i s'asignen a les seves variables corresponents
         map = new Mapa(mapa);
-        bender = new Robot(map, dibuixar);
+        bender = new Robot(map, dibuixar, debug);
     }
 
 

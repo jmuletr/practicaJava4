@@ -28,18 +28,21 @@ public class Robot {
     int heuristica;
     //variable per activar o desactivar la funcio benderArt que dibuixa al robot bender en ascii art
     boolean dibuixar;
-        Robot(Mapa map, boolean dib){
+    boolean debugger;
+        //constructor de robot on s'inicialitzen i asignen totes les variables
+        Robot(Mapa map, boolean dib, boolean debug){
             posicio[0]  = map.posicioX[0];
             posicio[1]  = map.posicioX[1];
             posicioX = map.posicioX;
             posicio$ = map.posicio$;
             this.map = map;
             dibuixar = dib;
+            debugger = debug;
         }
 
         String run (){
             while (map.m[posicio[0]][posicio[1]] != '$') {
-                //deb();
+                deb(debugger);
                 if (map.posicioX[0] == 0 && map.posicioX[1] == 0) return null;
                 if (dir.isEmpty()) dir = novaQeue(invers);
                 if (direccio == 'S') {
@@ -145,7 +148,7 @@ public class Robot {
     //A partir d'aquest punt es el codi per als segons test (no esta complet nomes pasa els dos primers mapes)
     int bestRun() {
         while (map.m[posicio[0]][posicio[1]] != '$') {
-            //deb();
+            deb(debugger);
             if (posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
                 pasos = 0;
             }
@@ -216,16 +219,18 @@ public class Robot {
         return pasos;
     }
 
-    private void deb() {
-        for (int i = 0; i < map.m.length; i++) {
-            for (int j = 0; j < map.m[i].length; j++) {
-                if (i == posicio[0] && j == posicio[1]){
-                    System.out.print('B');
-                }else System.out.print(map.m[i][j]);
+    private void deb(boolean d) {
+        if (d){
+            for (int i = 0; i < map.m.length; i++) {
+                for (int j = 0; j < map.m[i].length; j++) {
+                    if (i == posicio[0] && j == posicio[1]){
+                        System.out.print('B');
+                    }else System.out.print(map.m[i][j]);
+                }
+                System.out.println("");
             }
-            System.out.println("");
+            System.out.println(pasos);
         }
-        System.out.println(pasos);
     }
 
     private char calcDireccio(int[] posicio, int[] posicio$) {
