@@ -11,7 +11,7 @@ public class BenderTest2 {
         String mapa;
         Bender bender;
 
-  /*      mapa = "" +
+        mapa = "" +
                 "#######\n" +
                 "# X   #\n" +
                 "#     #\n" +
@@ -145,7 +145,7 @@ public class BenderTest2 {
         assertEquals(7, bender.bestRun());
 
 
-      */  mapa = "" +
+        mapa = "" +
                 "##############\n" +
                 "# X           #\n" +
                 "#             #\n" +

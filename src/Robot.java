@@ -169,7 +169,7 @@ public class Robot {
             editMap(numericMap, cont);
             cont++;
             pasos = cont;
-            deb(numericMap);
+            if (debugger)deb(numericMap);
         }
         return numericMap[posicio$[0]][posicio$[1]];
     }
@@ -181,7 +181,7 @@ public class Robot {
             for (int j = 0; j < this.map.m[0].length; j++) {
                 if (i == this.posicioX[0] && j == this.posicioX[1] || this.map.m[i][j] == '#') continue;
                 if (tes[0] > 0 && numericMap[tes[0]][tes[1]] > 0) {
-                    numericMap[tes[2]][tes[3]] = numericMap[i][j];
+                    numericMap[tes[2]][tes[3]] = numericMap[tes[0]][tes[1]];
                     tes[0] = 0;
                 } else {
                     if (i + 1 < this.map.m.length && this.map.m[i][j] != '#' && this.map.m[i + 1][j] != '#' && numericMap[i][j] == contador)
@@ -199,6 +199,7 @@ public class Robot {
     }
 
     private void deb() {
+        clearScreen();
             for (int i = 0; i < map.m.length; i++) {
                 for (int j = 0; j < map.m[i].length; j++) {
                     if (i == posicio[0] && j == posicio[1]){
@@ -211,17 +212,23 @@ public class Robot {
     }
 
     private void deb(int[][] map) {
+        clearScreen();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (i == posicio[0] && j == posicio[1]){
-                    System.out.print('X');
+                    System.out.print(Text.ANSI_GREEN + 'X' + Text.ANSI_RESET);
                 }else if(i == posicio$[0] && j == posicio$[1]){
-                    System.out.print('$');
-                }else System.out.print(map[i][j]);
+                    System.out.print(Text.ANSI_RED + '$' + Text.ANSI_RESET);
+                }else if(this.map.m[i][j] == 'T'){
+                    System.out.print(Text.ANSI_PURPLE + 'T' + Text.ANSI_RESET);
+                }else if(this.map.m[i][j] == '#'){
+                    System.out.print(Text.ANSI_YELLOW + '#' + Text.ANSI_RESET);
+                }
+                else System.out.print(map[i][j]);
             }
             System.out.println("");
         }
-        System.out.println(pasos);
+        System.out.println(Text.ANSI_BLUE + pasos + Text.ANSI_RESET);
     }
 
     //funcio que dibuixa a bender en ascii art
@@ -231,6 +238,11 @@ public class Robot {
                 "|  / /  '.' '. \\\n" + "|  \\ \\ @   @ / / \n" + "|   '---------'        \n" +
                 "|    _______|  \n" + "|  .'-+-+-+|  \n" + "|  '.-+-+-+|         \n" +
                 "|    \"\"\"\"\"\" |\n" + "'-.__   __.-'\n" + "     \"\"\"  \n");
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
 }
