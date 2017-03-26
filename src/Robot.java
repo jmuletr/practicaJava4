@@ -155,13 +155,16 @@ public class Robot {
 
     //Funcio per trobar el cami mes optim al desti
     public int bestRun() {
+        //cream un mapa numeric del tamany del mapa original
         int[][] mapaNumeric = new int[map.tamanyMaxY][map.tamanyMaxX];
+        //mentres no arrivem al desti continuam numerant el mapa
         while (mapaNumeric[posicio$[0]][posicio$[1]] == 0) {
             enumerarMapa(mapaNumeric, pasos);
             pasos++;
             if (debugger)deb(mapaNumeric);
         }
-        return mapaNumeric[posicio$[0]][posicio$[1]];
+        //retornam les pases nesesaries per arribar al desti
+        return pasos;
     }
 
 
@@ -183,6 +186,7 @@ public class Robot {
                 if (!empleat && mapaNumeric[posT[0]][posT[1]] > 0) {
                     mapaNumeric[posT[2]][posT[3]] = mapaNumeric[posT[0]][posT[1]];
                     empleat = true;
+                //numeram els quadrats abjacents als numerats
                 } else {
                     if (i + 1 < map.tamanyMaxY && map.m[i + 1][j] != '#' && mapaNumeric[i][j] == contador)
                         mapaNumeric[i + 1][j] = mapaNumeric[i][j] + 1;
