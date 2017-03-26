@@ -24,7 +24,7 @@ public class Robot {
     int[] posicio$;
     int[] posicioT;
     //pasos donats fins al desti (s'hutilitza a bestRun)
-    int pasos = 0;
+    int pasos = 1;
     //variable per activar o desactivar la funcio benderArt que dibuixa al robot bender en ascii art
     boolean dibuixar;
     boolean debugger;
@@ -159,39 +159,43 @@ public class Robot {
 
     //A partir d'aquest punt es el codi per als segons test (no esta complet)
     public int bestRun() {
-        int[][] numericMap = new int[this.map.m.length][this.map.m[0].length];
-        if (this.posicioX[0] + 1 < this.map.m.length && this.map.m[this.posicioX[0] + 1][this.posicioX[1]] != '#') numericMap[this.posicioX[0] + 1][this.posicioX[1]] = 1;
-        if (this.posicioX[1] + 1 < this.map.m[0].length && this.map.m[this.posicioX[0]][this.posicioX[1] + 1] != '#') numericMap[this.posicioX[0]][this.posicioX[1] + 1] = 1;
-        if (this.posicioX[0] - 1 > 0 && this.map.m[this.posicioX[0] - 1][this.posicioX[1]] != '#') numericMap[this.posicioX[0] - 1][this.posicioX[1]] = 1;
-        if (this.posicioX[1] - 1 > 0 && this.map.m[this.posicioX[0]][this.posicioX[1] - 1] != '#') numericMap[this.posicioX[0]][this.posicioX[1] - 1] = 1;
-        int cont = 1;
-        while (numericMap[posicio$[0]][posicio$[1]] == 0) {
-            editMap(numericMap, cont);
-            cont++;
-            pasos = cont;
-            if (debugger)deb(numericMap);
+        int[][] mapaNumeric = new int[map.tamanyMaxY][map.tamanyMaxX];
+        while (mapaNumeric[posicio$[0]][posicio$[1]] == 0) {
+            enumerarMapa(mapaNumeric, pasos);
+            pasos++;
+            if (debugger)deb(mapaNumeric);
         }
-        return numericMap[posicio$[0]][posicio$[1]];
+        return mapaNumeric[posicio$[0]][posicio$[1]];
     }
 
 
-    private void editMap(int[][] numericMap, int contador) {
-        int[] tes = posicioT;
-        for (int i = 0; i < this.map.m.length; i++) {
-            for (int j = 0; j < this.map.m[0].length; j++) {
-                if (i == this.posicioX[0] && j == this.posicioX[1] || this.map.m[i][j] == '#') continue;
-                if (tes[0] > 0 && numericMap[tes[0]][tes[1]] > 0) {
-                    numericMap[tes[2]][tes[3]] = numericMap[tes[0]][tes[1]];
-                    tes[0] = 0;
+    private void enumerarMapa(int[][] mapaNumeric, int contador) {
+        int[] posT = posicioT;
+        boolean empleat = false;
+        //posam valor als cuadres de devora la X
+        if (contador == 1){
+            if (this.posicioX[0] + 1 < map.tamanyMaxY && map.m[posicioX[0] + 1][posicioX[1]] != '#') mapaNumeric[posicioX[0] + 1][posicioX[1]] = pasos;
+            if (this.posicioX[1] + 1 < map.tamanyMaxX && map.m[posicioX[0]][posicioX[1] + 1] != '#') mapaNumeric[posicioX[0]][posicioX[1] + 1] = pasos;
+            if (this.posicioX[0] - 1 > 0 && map.m[posicioX[0] - 1][posicioX[1]] != '#') mapaNumeric[posicioX[0] - 1][posicioX[1]] = pasos;
+            if (this.posicioX[1] - 1 > 0 && map.m[posicioX[0]][posicioX[1] - 1] != '#') mapaNumeric[posicioX[0]][posicioX[1] - 1] = pasos;
+        }
+        //bucle anidat per recorre tot el mapa
+        for (int i = 0; i < map.tamanyMaxY; i++) {
+            for (int j = 0; j < map.tamanyMaxX; j++) {
+                if (i == posicioX[0] && j == posicioX[1] || map.m[i][j] == '#') continue;
+                //if per tenir en compte el teletransport
+                if (!empleat && mapaNumeric[posT[0]][posT[1]] > 0) {
+                    mapaNumeric[posT[2]][posT[3]] = mapaNumeric[posT[0]][posT[1]];
+                    empleat = true;
                 } else {
-                    if (i + 1 < this.map.m.length && this.map.m[i][j] != '#' && this.map.m[i + 1][j] != '#' && numericMap[i][j] == contador)
-                        numericMap[i + 1][j] = numericMap[i][j] + 1;
-                    if (j + 1 < this.map.m[0].length && this.map.m[i][j] != '#' && this.map.m[i][j + 1] != '#' && numericMap[i][j] == contador)
-                        numericMap[i][j + 1] = numericMap[i][j] + 1;
-                    if (i - 1 > 0 && this.map.m[i][j] != '#' && this.map.m[i - 1][j] != '#' && numericMap[i][j] == contador)
-                        numericMap[i - 1][j] = numericMap[i][j] + 1;
-                    if (j - 1 > 0 && this.map.m[i][j] != '#' && this.map.m[i][j - 1] != '#' && numericMap[i][j] == contador)
-                        numericMap[i][j - 1] = numericMap[i][j] + 1;
+                    if (i + 1 < map.tamanyMaxY && map.m[i][j] != '#' && map.m[i + 1][j] != '#' && mapaNumeric[i][j] == contador)
+                        mapaNumeric[i + 1][j] = mapaNumeric[i][j] + 1;
+                    if (j + 1 < map.tamanyMaxX && map.m[i][j] != '#' && map.m[i][j + 1] != '#' && mapaNumeric[i][j] == contador)
+                        mapaNumeric[i][j + 1] = mapaNumeric[i][j] + 1;
+                    if (i - 1 > 0 && map.m[i][j] != '#' && map.m[i - 1][j] != '#' && mapaNumeric[i][j] == contador)
+                        mapaNumeric[i - 1][j] = mapaNumeric[i][j] + 1;
+                    if (j - 1 > 0 && map.m[i][j] != '#' && map.m[i][j - 1] != '#' && mapaNumeric[i][j] == contador)
+                        mapaNumeric[i][j - 1] = mapaNumeric[i][j] + 1;
                 }
             }
 
@@ -199,7 +203,6 @@ public class Robot {
     }
 
     private void deb() {
-        clearScreen();
             for (int i = 0; i < map.m.length; i++) {
                 for (int j = 0; j < map.m[i].length; j++) {
                     if (i == posicio[0] && j == posicio[1]){
@@ -208,11 +211,9 @@ public class Robot {
                 }
                 System.out.println("");
             }
-            System.out.println(pasos);
     }
 
     private void deb(int[][] map) {
-        clearScreen();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (i == posicio[0] && j == posicio[1]){
@@ -238,11 +239,6 @@ public class Robot {
                 "|  / /  '.' '. \\\n" + "|  \\ \\ @   @ / / \n" + "|   '---------'        \n" +
                 "|    _______|  \n" + "|  .'-+-+-+|  \n" + "|  '.-+-+-+|         \n" +
                 "|    \"\"\"\"\"\" |\n" + "'-.__   __.-'\n" + "     \"\"\"  \n");
-    }
-
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 
 }
