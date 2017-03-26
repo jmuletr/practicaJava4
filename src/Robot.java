@@ -22,10 +22,9 @@ public class Robot {
     //posicio de x i $ (s'hutilitzen a bestRun)
     int[] posicioX;
     int[] posicio$;
+    int[] posicioT;
     //pasos donats fins al desti (s'hutilitza a bestRun)
     int pasos = 0;
-    //variable per calcular la direccio que prendra el robot (s'hutilitza a bestRun)
-    int heuristica;
     //variable per activar o desactivar la funcio benderArt que dibuixa al robot bender en ascii art
     boolean dibuixar;
     boolean debugger;
@@ -38,6 +37,7 @@ public class Robot {
             this.map = map;
             dibuixar = dib;
             debugger = debug;
+            posicioT = map.posicioT;
         }
         //funcio on es retorna el cami recorregut amb direccions predefinides
         String run (){
@@ -157,78 +157,45 @@ public class Robot {
     }
 
 
-    //A partir d'aquest punt es el codi per als segons test (no esta complet nomes pasa els dos primers mapes)
-    int bestRun() {
-        while (map.m[posicio[0]][posicio[1]] != '$') {
-            if (debugger)deb();
-            if (posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
-                pasos = 0;
-            }
-            if (map.posicioX[0] == 0 && map.posicioX[1] == 0) return 0;
-            if (dir.isEmpty()) dir = novaQeue(invers);
-            direccio = calcDireccio(posicio, posicio$);
-            if (direccio == 'S') {
-                if (map.m[posicio[0] + 1][posicio[1]] != '#' && map.m[posicio[0] + 1][posicio[1]] != 'P') {
-                    pasos++;
-                    posicio[0]++;
-                    empleat = false;
-                }else {
-                    map.replace(posicio[0] + 1, posicio[1], '#');
-                    if(posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
-                        pasos = 0;
-                        posicio[0] = posicioX[0];
-                        posicio[1] = posicioX[1];
-                    }
-                }
-            } else if (direccio == 'N') {
-                if (posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != '#' && posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != 'P') {
-                    pasos++;
-                    posicio[0]--;
-                    empleat = false;
-                }else {
-                    map.replace(posicio[0] - 1, posicio[1], '#');
-                    if(posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
-                        pasos = 0;
-                        posicio[0] = posicioX[0];
-                        posicio[1] = posicioX[1];
-                    }
-                }
-            } else if (direccio == 'E') {
-                if (map.m[posicio[0]][posicio[1] + 1] != '#' && map.m[posicio[0]][posicio[1] + 1] != 'P') {
-                    pasos++;
-                    posicio[1]++;
-                    empleat = false;
-                }else {
-                    map.replace(posicio[0], posicio[1] + 1,'#');
-                    if(posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
-                        pasos = 0;
-                        posicio[0] = posicioX[0];
-                        posicio[1] = posicioX[1];
-                    }
-                }
-            } else if (direccio == 'W') {
-                if (posicio[1] - 1 >=0 && map.m[posicio[0]][posicio[1] - 1] != '#' && map.m[posicio[0]][posicio[1] - 1] != 'P') {
-                    pasos++;
-                    posicio[1]--;
-                    empleat = false;
-                }else {
-                    map.replace(posicio[0],posicio[1] - 1, '#');
-                    if(posicio[0] == posicioX[0] && posicio[1] == posicioX[1]){
-                        pasos = 0;
-                        posicio[0] = posicioX[0];
-                        posicio[1] = posicioX[1];
-                    }
-                }
-            }
-            if (map.m[posicio[0]][posicio[1]] == 'T' && !empleat) {
-                posicio = tele(this.posicio);
-                empleat = true;
-            }
-            if (pasos >= map.tamanyMaxX*map.tamanyMaxY) return 0;
-            map.replace(posicio[0], posicio[1],'P');
+    //A partir d'aquest punt es el codi per als segons test (no esta complet)
+    public int bestRun() {
+        int[][] numericMap = new int[this.map.m.length][this.map.m[0].length];
+        if (this.posicioX[0] + 1 < this.map.m.length && this.map.m[this.posicioX[0] + 1][this.posicioX[1]] != '#') numericMap[this.posicioX[0] + 1][this.posicioX[1]] = 1;
+        if (this.posicioX[1] + 1 < this.map.m[0].length && this.map.m[this.posicioX[0]][this.posicioX[1] + 1] != '#') numericMap[this.posicioX[0]][this.posicioX[1] + 1] = 1;
+        if (this.posicioX[0] - 1 > 0 && this.map.m[this.posicioX[0] - 1][this.posicioX[1]] != '#') numericMap[this.posicioX[0] - 1][this.posicioX[1]] = 1;
+        if (this.posicioX[1] - 1 > 0 && this.map.m[this.posicioX[0]][this.posicioX[1] - 1] != '#') numericMap[this.posicioX[0]][this.posicioX[1] - 1] = 1;
+        int cont = 1;
+        while (numericMap[posicio$[0]][posicio$[1]] == 0) {
+            editMap(numericMap, cont);
+            cont++;
+            pasos = cont;
+            deb(numericMap);
         }
-        if (dibuixar) benderArt();
-        return pasos;
+        return numericMap[posicio$[0]][posicio$[1]];
+    }
+
+
+    private void editMap(int[][] numericMap, int contador) {
+        int[] tes = posicioT;
+        for (int i = 0; i < this.map.m.length; i++) {
+            for (int j = 0; j < this.map.m[0].length; j++) {
+                if (i == this.posicioX[0] && j == this.posicioX[1] || this.map.m[i][j] == '#') continue;
+                if (tes[0] > 0 && numericMap[tes[0]][tes[1]] > 0) {
+                    numericMap[tes[2]][tes[3]] = numericMap[i][j];
+                    tes[0] = 0;
+                } else {
+                    if (i + 1 < this.map.m.length && this.map.m[i][j] != '#' && this.map.m[i + 1][j] != '#' && numericMap[i][j] == contador)
+                        numericMap[i + 1][j] = numericMap[i][j] + 1;
+                    if (j + 1 < this.map.m[0].length && this.map.m[i][j] != '#' && this.map.m[i][j + 1] != '#' && numericMap[i][j] == contador)
+                        numericMap[i][j + 1] = numericMap[i][j] + 1;
+                    if (i - 1 > 0 && this.map.m[i][j] != '#' && this.map.m[i - 1][j] != '#' && numericMap[i][j] == contador)
+                        numericMap[i - 1][j] = numericMap[i][j] + 1;
+                    if (j - 1 > 0 && this.map.m[i][j] != '#' && this.map.m[i][j - 1] != '#' && numericMap[i][j] == contador)
+                        numericMap[i][j - 1] = numericMap[i][j] + 1;
+                }
+            }
+
+        }
     }
 
     private void deb() {
@@ -243,57 +210,18 @@ public class Robot {
             System.out.println(pasos);
     }
 
-    private char calcDireccio(int[] posicio, int[] posicio$) {
-        heuristica = 0;
-        int p[] = new int[2];
-        char dir = 'S';
-            if (map.m[posicio[0] + 1][posicio[1]] != '#' && map.m[posicio[0] + 1][posicio[1]] != 'P') {
-                p[0] = posicio[0] + 1;
-                p[1] = posicio[1];
-                if (heuristica > calcHeuristica(posicio$,p) || heuristica == 0) {
-                    dir = 'S';
-                    heuristica = calcHeuristica(posicio$, p);
-                }
+    private void deb(int[][] map) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (i == posicio[0] && j == posicio[1]){
+                    System.out.print('X');
+                }else if(i == posicio$[0] && j == posicio$[1]){
+                    System.out.print('$');
+                }else System.out.print(map[i][j]);
             }
-
-            if (posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != '#'&& posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != 'P') {
-                p[0] = posicio[0] - 1;
-                p[1] = posicio[1];
-                if (heuristica > calcHeuristica(posicio$,p) || heuristica == 0){
-                    dir = 'N';
-                    heuristica = calcHeuristica(posicio$,p);
-                }
-            }
-
-            if (map.m[posicio[0]][posicio[1] + 1] != '#' && map.m[posicio[0]][posicio[1] + 1] != 'P') {
-                p[0] = posicio[0];
-                p[1] = posicio[1] + 1;
-                if (heuristica > calcHeuristica(posicio$,p) || heuristica == 0){
-                    dir =  'E';
-                    heuristica = calcHeuristica(posicio$,p);
-                }
-            }
-
-            if (posicio[1] - 1 >=0 && map.m[posicio[0]][posicio[1] - 1] != '#' && map.m[posicio[0]][posicio[1] - 1] != 'P') {
-                p[0] = posicio[0];
-                p[1] = posicio[1] - 1;
-                if (heuristica > calcHeuristica(posicio$,p) || heuristica == 0){
-                    dir = 'W';
-                    heuristica = calcHeuristica(posicio$,p);
-                }
-            }
-        return dir;
-    }
-
-    private int calcHeuristica (int[] posicio$, int[] posicio){
-        int pos0, pos1;
-        if (posicio$[0] > posicio[0]){
-            pos0 = posicio$[0] - posicio[0];
-        } else pos0 = posicio[0] - posicio$[0];
-        if (posicio$[1] > posicio[1]){
-            pos1 = posicio$[1] - posicio[1];
-        } else pos1 = posicio[1] - posicio$[1];
-        return pos0 + pos1;
+            System.out.println("");
+        }
+        System.out.println(pasos);
     }
 
     //funcio que dibuixa a bender en ascii art

@@ -11,6 +11,8 @@ public class Mapa {
     int tamanyMaxY = 0;
     //posicio del desti
     int[] posicio$ = new int[2];
+    int[] posicioT = new int[4];
+    boolean primer = true;
 
     Mapa(String mapa){
         //es divideix el mapa en arrays de string on cada un representa una linea del mapa
@@ -40,6 +42,16 @@ public class Mapa {
                 if (temp[i].charAt(j) == '$') {
                     posicio$[0] = i;
                     posicio$[1] = j;
+                }
+                if (temp[i].charAt(j) == 'T') {
+                    if (primer){
+                        posicioT[0] = i;
+                        posicioT[1] = j;
+                        primer = false;
+                    } else{
+                        posicioT[2] = i;
+                        posicioT[3] = j;
+                    }
                 }
             }
         }
