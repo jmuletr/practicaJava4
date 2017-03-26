@@ -136,28 +136,24 @@ public class Robot {
     private char camviDireccio(Queue<Character> dir, int[] posicio) {
         for (int i = 0; i < 4; i++) {
             if (dir.element() == 'S') {
-                if (map.m[posicio[0] + 1][posicio[1]] != '#') {
-                    return dir.poll();
-                } else dir.remove();
+                if (map.m[posicio[0] + 1][posicio[1]] != '#') return dir.poll();
+                else dir.remove();
             } else if (dir.element() == 'N') {
-                if (posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != '#') {
-                    return dir.poll();
-                } else dir.remove();
+                if (posicio[0] - 1 >=0 && map.m[posicio[0] - 1][posicio[1]] != '#') return dir.poll();
+                else dir.remove();
             } else if (dir.element() == 'E') {
-                if (map.m[posicio[0]][posicio[1] + 1] != '#') {
-                    return dir.poll();
-                } else dir.remove();
-            } else if (dir.element() == 'W') {
-                if (posicio[1] - 1 >=0 && map.m[posicio[0]][posicio[1] - 1] != '#') {
-                    return dir.poll();
-                } else dir.remove();
+                if (map.m[posicio[0]][posicio[1] + 1] != '#') return dir.poll();
+                else dir.remove();
+            } else {
+                if (posicio[1] - 1 >=0 && map.m[posicio[0]][posicio[1] - 1] != '#') return dir.poll();
+                else dir.remove();
             }
         }
-        return 'S';
+      return 'S';
     }
 
 
-    //A partir d'aquest punt es el codi per als segons test (no esta complet)
+    //Funcio per trobar el cami mes optim al desti
     public int bestRun() {
         int[][] mapaNumeric = new int[map.tamanyMaxY][map.tamanyMaxX];
         while (mapaNumeric[posicio$[0]][posicio$[1]] == 0) {
@@ -188,13 +184,13 @@ public class Robot {
                     mapaNumeric[posT[2]][posT[3]] = mapaNumeric[posT[0]][posT[1]];
                     empleat = true;
                 } else {
-                    if (i + 1 < map.tamanyMaxY && map.m[i][j] != '#' && map.m[i + 1][j] != '#' && mapaNumeric[i][j] == contador)
+                    if (i + 1 < map.tamanyMaxY && map.m[i + 1][j] != '#' && mapaNumeric[i][j] == contador)
                         mapaNumeric[i + 1][j] = mapaNumeric[i][j] + 1;
-                    if (j + 1 < map.tamanyMaxX && map.m[i][j] != '#' && map.m[i][j + 1] != '#' && mapaNumeric[i][j] == contador)
+                    if (j + 1 < map.tamanyMaxX && map.m[i][j + 1] != '#' && mapaNumeric[i][j] == contador)
                         mapaNumeric[i][j + 1] = mapaNumeric[i][j] + 1;
-                    if (i - 1 > 0 && map.m[i][j] != '#' && map.m[i - 1][j] != '#' && mapaNumeric[i][j] == contador)
+                    if (i - 1 > 0 && map.m[i - 1][j] != '#' && mapaNumeric[i][j] == contador)
                         mapaNumeric[i - 1][j] = mapaNumeric[i][j] + 1;
-                    if (j - 1 > 0 && map.m[i][j] != '#' && map.m[i][j - 1] != '#' && mapaNumeric[i][j] == contador)
+                    if (j - 1 > 0 && map.m[i][j - 1] != '#' && mapaNumeric[i][j] == contador)
                         mapaNumeric[i][j - 1] = mapaNumeric[i][j] + 1;
                 }
             }
