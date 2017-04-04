@@ -56,15 +56,4 @@ public class Mapa {
             }
         }
     }
-    //funcio utilitzada per best run per reemplaçar posicions del mapa tant per P si s'ha pasat pel punt o # si es vol
-    // convertir en paret per evitar tornar a pasari
-    void replace(int pos1, int pos2, char c) {
-        if (m[pos1][pos2] != '$'){
-            if (m[pos1][pos2] != 'T') {
-                if (m[pos1][pos2] != 'I') {
-                    m[pos1][pos2] = c;
-                }
-            }
-        }
-    }
 }

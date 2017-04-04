@@ -95,7 +95,7 @@ public class Robot {
                         invers = true;
                     } else invers = false;
                     dir = novaQeue(invers);
-                    direccio = dir.poll();
+                    //direccio = dir.poll();
                     empleat = true;
                 }
                 //si pasam per una T cridam la funcio tele per mourernos a l'altre T
@@ -151,7 +151,6 @@ public class Robot {
         }
       return 'S';
     }
-
 
     //Funcio per trobar el cami mes optim al desti
     public int bestRun() {
